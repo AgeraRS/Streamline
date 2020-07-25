@@ -1,20 +1,13 @@
 package vo;
 
 public class ImageWrapper {
-    private String token;
+
     private String thumbnailImage;
     private String fullSizeImage;
     private String resolution;
     private String category;
     private Integer fileSize;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getThumbnailImage() {
         return thumbnailImage;

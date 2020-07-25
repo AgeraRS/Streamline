@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class CollectionServlet
+ * Servlet implementation class GetFavoriteRecords
  */
-@WebServlet("/CollectionServlet")
-public class AddFavoriteServlet extends HttpServlet {
+@WebServlet("/GetFavoriteRecords")
+public class GetFavoriteRecords extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddFavoriteServlet() {
+    public GetFavoriteRecords() {
         super();
         // TODO Auto-generated constructor stub
     }
