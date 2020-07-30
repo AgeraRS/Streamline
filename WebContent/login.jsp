@@ -23,17 +23,17 @@
 			<h3 class="text-left text-info">
 				在线课堂
 			</h3>
-			<form action="/Streamline/LoginServlet" method="post" role="form">
+			<form action="/Streamline/GetFavoriteState" method="post" role="form">
 				<div class="form-group">
 					 <label for="inputEmail3" class="col-sm-2 control-label">学生证号</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="inputEmail3" name="username"/>
+						<input type="text" class="form-control" id="inputEmail3" name="token"/>
 					</div>
 				</div>
 				<div class="form-group">
 					 <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
 					<div class="col-sm-10">
-						<input type="password" class="form-control" id="inputPassword3" name="password"/>
+						<input type="password" class="form-control" id="inputPassword3" name="thumbnailUrl"/>
 					</div>
 				</div>
 				<div class="form-group">

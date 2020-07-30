@@ -1,10 +1,11 @@
 package dao;
 
 import jdbcUtil.JDBCUtil;
-import vo.ImageWrapper;
+import vo.ImageSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -18,14 +19,14 @@ public class FavoriteDao {
         return dao;
     }
 
-    private boolean isPicExist(String userId){
+    private boolean isPicExist(String url){
         boolean b=false;
         String id=null;
         PreparedStatement ps=null;
         Connection c=null;
         ResultSet rs=null;
-        String sql="SELECT id FROM picture WHERE userId=?";
-        String[] paras ={userId};
+        String sql="SELECT id FROM picture WHERE url=?";
+        String[] paras ={url};
         try{
             c= JDBCUtil.getConnection();
             ps=c.prepareStatement(sql);
@@ -75,13 +76,13 @@ public class FavoriteDao {
         return id;
     }
 
-    private String getPicId(String userId){
+    private String getPicId(String url){
         String id=null;
         PreparedStatement ps=null;
         Connection c=null;
         ResultSet rs=null;
-        String sql="SELECT id FROM picture WHERE userId=?";
-        String[] paras ={userId};
+        String sql="SELECT id FROM picture WHERE url=?";
+        String[] paras ={url};
         try{
             c= JDBCUtil.getConnection();
             ps=c.prepareStatement(sql);
@@ -102,16 +103,17 @@ public class FavoriteDao {
         return id;
     }
 
-    public boolean addToFavorite(ImageWrapper imageWrapper,String token) {
+    public boolean addToFavorite(ImageSource imageSource, String token) {
         // TODO Auto-generated method stub
         boolean b=true;
         String userId=getUserId(token);
-        boolean picExist=isPicExist(userId);
+        delFromFavorite(imageSource.getThumbnailImage(),token);
+        boolean picExist=isPicExist(imageSource.getFullSizeImage());
         String picId;
         if (!picExist){
             picId= UUID.randomUUID().toString();
         }else {
-            picId=getPicId(userId);
+            picId=getPicId(imageSource.getFullSizeImage());
         }
         PreparedStatement psP=null;
         Connection cP=null;
@@ -120,11 +122,10 @@ public class FavoriteDao {
         String sqlC="INSERT INTO collection(userId,picId)VALUES(?,?)";
         String[] parasC ={userId,picId};
         String sqlP="INSERT INTO picture (id,url,thumbnailUrl,category,resolution,userId,fileSize) VALUES(?,?,?,?,?,?,?)";
-        String[] parasP ={picId,imageWrapper.getFullSizeImage(),imageWrapper.getThumbnailImage(),imageWrapper.getResolution(),imageWrapper.getResolution()
+        String[] parasP ={picId, imageSource.getFullSizeImage(), imageSource.getThumbnailImage(), imageSource.getCategory(), imageSource.getResolution()
         ,userId};
 
         try{
-
             cC=JDBCUtil.getConnection();
             psC=cC.prepareStatement(sqlC);
             for (int i=0;i<parasC.length;i++){
@@ -138,7 +139,7 @@ public class FavoriteDao {
                 for(int i=0;i<parasP.length;i++){
                     psP.setString(i+1,parasP[i]);
                 }
-                psP.setInt(7,imageWrapper.getFileSize());
+                psP.setInt(7, imageSource.getFileSize());
                 psP.executeUpdate();
             }
 
@@ -183,6 +184,7 @@ public class FavoriteDao {
         Connection c=null;
         ResultSet rs=null;
         String sql="select picId from collection WHERE picId=(SELECT id FROM picture WHERE thumbnailUrl=?)AND userId=?";
+
         String[] paras ={thumbUrl,uId};
         try{
             c= JDBCUtil.getConnection();
@@ -208,10 +210,10 @@ public class FavoriteDao {
         return b;
     }
 
-    private List<String> getPicId(int page,String token) {
+    private List<String> getPicIds(int page,String token) {
         // TODO Auto-generated method stub
-        int pageNow=page;//当前页
-        int pageSize=20;//每页显示的记录
+        int pageNow=page;//褰撳墠椤�
+        int pageSize=20;//姣忛〉鏄剧ず鐨勮褰�
 
         String uId=getUserId(token);
         List<String> picIds=new LinkedList<>();
@@ -225,7 +227,7 @@ public class FavoriteDao {
         try{
             c=JDBCUtil.getConnection();
             c2=JDBCUtil.getConnection();
-            //算出页数
+            //绠楀嚭椤垫暟
             ps=c.prepareStatement("select COUNT(*) from collection");
             rs=ps.executeQuery();
             rs.next();
@@ -251,6 +253,48 @@ public class FavoriteDao {
 
         return picIds;
     }
+
+    public List<ImageSource> getImages(int page, String token){
+
+        List<String>picIds=getPicIds(page,token);
+        String uId=getUserId(token);
+        List<ImageSource>images=new ArrayList<>();
+        PreparedStatement ps=null;
+        Connection c=null;
+        ResultSet rs=null;
+        String sql="select url,thumbnailUrl,category,resolution,fileSize from picture,collection WHERE id=? and collection.userId=?";
+        String[] paras=new String[2];
+        paras[1]=uId;
+        try{
+            c= JDBCUtil.getConnection();
+            ps=c.prepareStatement(sql);
+            for (int i=0;i<picIds.size();i++){
+                paras[0]=picIds.get(i);
+                ps.setString(1,paras[0]);
+                ps.setString(2,paras[1]);
+                ImageSource image=new ImageSource();
+                rs=ps.executeQuery();
+                while (rs.next()){
+
+                    image.setThumbnailImage(rs.getString("thumbnailUrl"));
+                    image.setResolution(rs.getString("resolution"));
+                    image.setFullSizeImage(rs.getString("url"));
+                    image.setFileSize(rs.getInt("fileSize"));
+                    image.setCategory(rs.getString("category"));
+                }
+                images.add(image);
+
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            JDBCUtil.release(c, ps,rs);
+        }
+        return images;
+    }
+
+
 
 
 

@@ -11,10 +11,10 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="D:/eclipse/mysql-connector-java-5.1.49.jar"/>
 	<classpathentry kind="lib" path="C:/Users/AGERA R/Downloads/mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse/mysql-connector-java-5.1.48.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/gson-2.8.6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

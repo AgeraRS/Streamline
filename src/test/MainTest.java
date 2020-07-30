@@ -2,35 +2,37 @@ package test;
 
 import dao.FavoriteDao;
 import dao.HistoryDao;
-import dao.UserDao;
-import vo.ImageWrapper;
-import vo.LoggedInUser;
-import vo.User;
+import vo.ImageSource;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.UUID;
 
 public class MainTest {
 
     public static void main(String[] args){
 
 
-        FavoriteDao dao= FavoriteDao.getFavoriteDao();
-        ImageWrapper imageWrapper=new ImageWrapper();
-        imageWrapper.setCategory("cat");
-        imageWrapper.setFileSize(100);
-        imageWrapper.setFullSizeImage("full");
-        imageWrapper.setResolution("100x100");
-        imageWrapper.setThumbnailImage("thumb");
+        HistoryDao historyDao= HistoryDao.getHistoryDao();
+        FavoriteDao favoriteDao=FavoriteDao.getFavoriteDao();
+        ImageSource imageSource =new ImageSource();
+        imageSource.setCategory("cat");
+        imageSource.setFileSize(100);
+        imageSource.setFullSizeImage("full");
+        imageSource.setResolution("100x100");
+        imageSource.setThumbnailImage("thumb");
    //  "15097052-1db7-4223-96a3-d740e1b4845e");
 
-        List<String> pics=dao.getPicId(3,"token");
+
+
+        List<ImageSource> pics=historyDao.getImages(1,"d6c5ee5b-59bb-44c7-b285-5f5a0b269f6d");
 
         for (int i=0;i<pics.size();i++){
             System.out.println(pics.get(i));
         }
 
-       
+
+
+
        
 
     }

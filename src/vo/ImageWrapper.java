@@ -1,61 +1,27 @@
 package vo;
 
 public class ImageWrapper {
+    @Override
+	public String toString() {
+		return "ImageWrapper [token=" + token + ", imageSource=" + imageSource.toString();
+	}
 
-    private String thumbnailImage;
-    private String fullSizeImage;
-    private String resolution;
-    private String category;
-    private Integer fileSize;
-
-
-    public String getThumbnailImage() {
-        return thumbnailImage;
+	public String getToken() {
+        return token;
     }
 
-    public void setThumbnailImage(String thumbnailImage) {
-        this.thumbnailImage = thumbnailImage;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getFullSizeImage() {
-        return fullSizeImage;
+    public ImageSource getImageSource() {
+        return imageSource;
     }
 
-    public void setFullSizeImage(String fullSizeImage) {
-        this.fullSizeImage = fullSizeImage;
+    public void setImageSource(ImageSource imageSource) {
+        this.imageSource = imageSource;
     }
 
-    public String getResolution() {
-        return resolution;
-    }
-
-    public void setResolution(String resolution) {
-        this.resolution = resolution;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public Integer getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Integer fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public String getSourceCreatedTime() {
-        return sourceCreatedTime;
-    }
-
-    public void setSourceCreatedTime(String sourceCreatedTime) {
-        this.sourceCreatedTime = sourceCreatedTime;
-    }
-
-    private String sourceCreatedTime;
+    private String token;
+    private ImageSource imageSource;
 }
