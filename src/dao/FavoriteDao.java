@@ -231,8 +231,8 @@ public class FavoriteDao {
             ps=c.prepareStatement("select COUNT(*) from collection");
             rs=ps.executeQuery();
             rs.next();
-            String[] paras={uId};
-            String sql=("SELECT picId FROM collection WHERE picId NOT in(SELECT t.picId from(SELECT picId FROM collection LIMIT 0,"+pageSize*(pageNow-1)+")as t)AND userId=? LIMIT 0,"+pageSize);
+            String[] paras={uId,uId};
+            String sql=("SELECT picId FROM collection WHERE picId NOT in(SELECT t.picId from(SELECT picId FROM collection where userId=? LIMIT 0,"+pageSize*(pageNow-1)+")as t)AND userId=? LIMIT 0,"+pageSize);
             ps2=c2.prepareStatement(sql);
             for(int i=0;i<paras.length;i++){
                 ps2.setString(i+1,paras[i]);
@@ -275,7 +275,6 @@ public class FavoriteDao {
                 ImageSource image=new ImageSource();
                 rs=ps.executeQuery();
                 while (rs.next()){
-
                     image.setThumbnailImage(rs.getString("thumbnailUrl"));
                     image.setResolution(rs.getString("resolution"));
                     image.setFullSizeImage(rs.getString("url"));

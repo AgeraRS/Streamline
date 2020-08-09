@@ -182,8 +182,8 @@ public class HistoryDao {
             ps=c.prepareStatement("select COUNT(*) from history");
             rs=ps.executeQuery();
             rs.next();
-            String[] paras={uId};
-            String sql=("SELECT picId FROM history WHERE picId NOT in(SELECT t.picId from(SELECT picId FROM history order by time desc LIMIT 0,"+pageSize*(pageNow-1)+")as t)AND userId=? order by time desc LIMIT 0,"+pageSize);
+            String[] paras={uId,uId};
+            String sql=("SELECT picId FROM history WHERE picId NOT in(SELECT t.picId from(SELECT picId FROM history where userId=? order by time desc LIMIT 0,"+pageSize*(pageNow-1)+")as t)AND userId=? order by time desc LIMIT 0,"+pageSize);
             ps2=c2.prepareStatement(sql);
             for(int i=0;i<paras.length;i++){
                 ps2.setString(i+1,paras[i]);
